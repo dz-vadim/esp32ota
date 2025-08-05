@@ -10,6 +10,8 @@ private:
     bool isInitialized;
 
 public:
+    String lastChatId;  // Зберігаємо ID останнього активного чату
+    void (*messageHandler)(FB_msg&);  // Вказівник на функцію обробки повідомлень
     FastBot* bot; // Публічний доступ для обробки повідомлень
 
 public:

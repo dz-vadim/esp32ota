@@ -4,6 +4,7 @@
 TelegramBot::TelegramBot() {
     bot = new FastBot();
     isInitialized = false;
+    messageHandler = nullptr;
 }
 
 TelegramBot::~TelegramBot() {
@@ -21,9 +22,24 @@ void TelegramBot::begin(const String& token) {
     Serial.println("Telegram bot initialized");
 }
 
+// Глобальна змінна для зберігання вказівника на екземпляр TelegramBot
+static TelegramBot* currentBot = nullptr;
+
+// Глобальна функція-обгортка
+static void globalMessageHandler(FB_msg& msg) {
+    if (currentBot) {
+        currentBot->lastChatId = msg.chatID;  // Зберігаємо ID чату
+        if (currentBot->messageHandler) {
+            currentBot->messageHandler(msg);  // Викликаємо оригінальний обробник
+        }
+    }
+}
+
 void TelegramBot::setMessageHandler(void (*handler)(FB_msg&)) {
     if (isInitialized && bot) {
-        bot->attach(handler);
+        messageHandler = handler;
+        currentBot = this;
+        bot->attach(globalMessageHandler);
     }
 }
 
@@ -40,26 +56,20 @@ void TelegramBot::sendMessage(const String& message, const String& targetChatId)
 }
 
 void TelegramBot::sendStatus() {
-    // This method will be called from the message handler where we have the chat ID
-    // The actual status message will be sent directly via bot->sendMessage
-    if (isInitialized) {
+    if (isInitialized && lastChatId.length() > 0) {
         String status = "🔄 ESP32 Status:\n";
         status += "📶 WiFi: " + String(WiFi.status() == WL_CONNECTED ? "Connected" : "Disconnected") + "\n";
         status += "🌐 IP: " + WiFi.localIP().toString() + "\n";
         status += "📱 Version: " + String(FW_VERSION);
         
-        if (bot->lastChatsArr[0]) {  // Send to the last user who interacted with the bot
-            bot->sendMessage(bot->lastChatsArr[0], status);
-        }
+        sendMessage(status, lastChatId);
     }
 }
 
 void TelegramBot::sendVersion() {
-    if (isInitialized) {
+    if (isInitialized && lastChatId.length() > 0) {
         String version = "📱 Current Version: " + String(FW_VERSION);
-        if (bot->lastChatsArr[0]) {  // Send to the last user who interacted with the bot
-            bot->sendMessage(bot->lastChatsArr[0], version);
-        }
+        sendMessage(version, lastChatId);
     }
 }
 

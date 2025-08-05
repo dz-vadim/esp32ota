@@ -56,7 +56,10 @@ void sendNewMessage(FB_msg& msg) {
 // Функція зворотного виклику для OTA
 void onOTAUpdate(const String& status) {
     lcdManager.printOTAStatus(status);
-    telegramBot.sendMessage("OTA Update: " + status);
+    if (telegramBot.isBotReady()) {
+        // Використовуємо бот для відправки повідомлення всім підключеним користувачам
+        telegramBot.bot->sendMessage("🔄 OTA Update: " + status);
+    }
 }
 
 void setup() {
@@ -156,8 +159,8 @@ void loop() {
                     lastUpdateCheck = millis();
                     
                     if (otaUpdater.checkForUpdate()) {
-                        telegramBot.sendMessage("🔄 New firmware update available!");
                         lcdManager.printOTAStatus("Update Available");
+                        // Повідомлення про оновлення буде відправлено при наступній взаємодії з ботом
                     }
                 }
             }
