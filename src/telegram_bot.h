@@ -19,7 +19,7 @@ public:
     void begin(const String& token);
     void setMessageHandler(void (*handler)(FB_msg&));
     void update();
-    void sendMessage(const String& message, const String& targetChatId = "");
+    void sendMessage(const String& message, const String& targetChatId);
     void sendStatus();
     void sendVersion();
     void handleCommands();

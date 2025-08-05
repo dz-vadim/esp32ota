@@ -94,8 +94,8 @@ void setup() {
             webServer.setConfigManager(&configManager);
             webServer.begin();
             
-            // Відправка повідомлення про запуск
-            telegramBot.sendMessage("🚀 ESP32 started successfully!\nIP: " + wifiManager.getLocalIP() + "\nVersion: " + FW_VERSION);
+            // При старті системи немає активних чатів, тому повідомлення про запуск буде відправлено
+            // першому користувачу, який напише боту
             
 
             

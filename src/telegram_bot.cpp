@@ -33,32 +33,33 @@ void TelegramBot::update() {
     }
 }
 
-void TelegramBot::sendMessage(const String& message, const String& targetChatId = "") {
+void TelegramBot::sendMessage(const String& message, const String& targetChatId) {
     if (isInitialized) {
-        if (targetChatId.length() > 0) {
-            bot->sendMessage(targetChatId.c_str(), message.c_str());
-        } else {
-            // Broadcast to all users who have interacted with the bot
-            bot->broadcastText(message.c_str());
-        }
+        bot->sendMessage(targetChatId.c_str(), message.c_str());
     }
 }
 
 void TelegramBot::sendStatus() {
+    // This method will be called from the message handler where we have the chat ID
+    // The actual status message will be sent directly via bot->sendMessage
     if (isInitialized) {
         String status = "🔄 ESP32 Status:\n";
         status += "📶 WiFi: " + String(WiFi.status() == WL_CONNECTED ? "Connected" : "Disconnected") + "\n";
         status += "🌐 IP: " + WiFi.localIP().toString() + "\n";
         status += "📱 Version: " + String(FW_VERSION);
         
-        sendMessage(status);
+        if (bot->lastChatsArr[0]) {  // Send to the last user who interacted with the bot
+            bot->sendMessage(bot->lastChatsArr[0], status);
+        }
     }
 }
 
 void TelegramBot::sendVersion() {
     if (isInitialized) {
         String version = "📱 Current Version: " + String(FW_VERSION);
-        sendMessage(version);
+        if (bot->lastChatsArr[0]) {  // Send to the last user who interacted with the bot
+            bot->sendMessage(bot->lastChatsArr[0], version);
+        }
     }
 }
 
