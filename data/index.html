@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 OTA Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 ESP32 Dashboard</h1>
+            <p class="subtitle">Система керування ESP32</p>
+        </header>
+        
+        <div class="status-grid">
+            <div class="status-card">
+                <div class="card-header">
+                    <h3>📱 Версія</h3>
+                </div>
+                <div class="card-content">
+                    <span id="version" class="status-value">Завантаження...</span>
+                </div>
+            </div>
+            
+            <div class="status-card">
+                <div class="card-header">
+                    <h3>🌐 IP адреса</h3>
+                </div>
+                <div class="card-content">
+                    <span id="ip" class="status-value">Завантаження...</span>
+                </div>
+            </div>
+            
+            <div class="status-card">
+                <div class="card-header">
+                    <h3>📶 Wi-Fi</h3>
+                </div>
+                <div class="card-content">
+                    <span id="wifi-status" class="status-value">Завантаження...</span>
+                </div>
+            </div>
+            
+            <div class="status-card">
+                <div class="card-header">
+                    <h3>⏱️ Час</h3>
+                </div>
+                <div class="card-content">
+                    <span id="uptime" class="status-value">Завантаження...</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="update-btn" class="btn btn-primary" onclick="startOTA()">
+                🔄 OTA Update
+            </button>
+            <button id="refresh-btn" class="btn btn-secondary" onclick="manualRefreshStatus()">
+                🔄 Refresh
+            </button>
+        </div>
+        
+        <div class="log-container">
+            <h3>📋 Лог подій</h3>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
