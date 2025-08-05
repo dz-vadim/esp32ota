@@ -83,7 +83,7 @@ void setup() {
 
             
             // Ініціалізація Telegram бота
-            telegramBot.begin(BOT_TOKEN, CHAT_ID);
+            telegramBot.begin(BOT_TOKEN);
             telegramBot.setMessageHandler(sendNewMessage);
             
             // Ініціалізація OTA

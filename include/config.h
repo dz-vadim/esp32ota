@@ -10,7 +10,7 @@
 #define CHAT_ID "123456"
 
 // OTA налаштування
-#define OTA_URL "https://raw.githubusercontent.com/user/repo/main/firmware.bin"
+#define OTA_URL "https://raw.githubusercontent.com/dz-vadim/esp32ota/main/bin/firmware.bin"
 #define FW_VERSION "v1.0.0"
 
 // LCD налаштування

@@ -1,0 +1,40 @@
+name: Build ESP32 Firmware
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: pip install platformio
+
+      - name: Build firmware
+        run: pio run
+
+      - name: Copy firmware to bin folder
+        run: |
+          mkdir -p bin
+          cp .pio/build/esp32dev/firmware.bin bin/firmware.bin
+
+      - name: Commit and push firmware
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add bin/firmware.bin
+          git commit -m "Auto-build firmware.bin"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

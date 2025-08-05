@@ -7,7 +7,6 @@
 class TelegramBot {
 private:
     String token;
-    String chatId;
     bool isInitialized;
 
 public:
@@ -17,10 +16,10 @@ public:
     TelegramBot();
     ~TelegramBot();
     
-    void begin(const String& token, const String& chatId);
+    void begin(const String& token);
     void setMessageHandler(void (*handler)(FB_msg&));
     void update();
-    void sendMessage(const String& message);
+    void sendMessage(const String& message, const String& targetChatId = "");
     void sendStatus();
     void sendVersion();
     void handleCommands();

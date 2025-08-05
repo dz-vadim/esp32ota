@@ -12,9 +12,8 @@ TelegramBot::~TelegramBot() {
     }
 }
 
-void TelegramBot::begin(const String& token, const String& chatId) {
+void TelegramBot::begin(const String& token) {
     this->token = token;
-    this->chatId = chatId;
     
     bot->setToken(token.c_str());
     isInitialized = true;
@@ -34,9 +33,14 @@ void TelegramBot::update() {
     }
 }
 
-void TelegramBot::sendMessage(const String& message) {
+void TelegramBot::sendMessage(const String& message, const String& targetChatId = "") {
     if (isInitialized) {
-        bot->sendMessage(chatId.c_str(), message.c_str());
+        if (targetChatId.length() > 0) {
+            bot->sendMessage(targetChatId.c_str(), message.c_str());
+        } else {
+            // Broadcast to all users who have interacted with the bot
+            bot->broadcastText(message.c_str());
+        }
     }
 }
 
