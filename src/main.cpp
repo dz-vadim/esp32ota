@@ -71,7 +71,7 @@ void setup() {
     
     // Ініціалізація LCD
     lcdManager.begin();
-    lcdManager.printStatus("Starting");
+    lcdManager.printStatus("Starting V.0.1");
     
     // Перевірка наявності збережених налаштувань Wi-Fi
     if (configManager.hasValidWiFiConfig()) {
